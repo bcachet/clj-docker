@@ -2,11 +2,9 @@
  :deps {}
  :aliases
  {:test {:extra-paths ["test"]
-         :extra-deps {com.cognitect/test-runner
-                      {:git/url "https://github.com/cognitect-labs/test-runner.git"
-                       :sha "b6b3193fcc42659d7e46ecd1884a228993441182"}}
-         :main-opts ["-m" "cognitect.test-runner"]
-         :exec-fn cognitect.test-runner.api/test}
+         :extra-deps {lambdaisland/kaocha {:mvn/version "1.63.998"}}
+         :exec-fn kaocha.runner/exec-fn
+         :exec-args {}}
   :uberdeps {:replace-deps {uberdeps/uberdeps {:mvn/version "1.1.4"}}
              :replace-paths []
              :main-opts ["-m" "uberdeps.uberjar"]}}}

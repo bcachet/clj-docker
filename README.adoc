@@ -7,30 +7,59 @@ Here I try to benefit from Docker layers to build/test from the same Java enviro
 
 == Continous Integration
 
+=== Test
+
+We can run the _test_ step if needed
+
+[source,sh]
+----
+➜ docker build --target test .
+----
+
+Let's introduce a failing test
+
+[source,sh]
+----
+➜ cat >> test/exo/add_test.clj<< EOF
+(deftest will-fail
+  (is (= 1 (sum 1 1))))
+EOF
+➜ docker build --target test --tag clj-example-tests .
+➜ docker run clj-example-tests:latest
+----
+
+Here is output of the run
+[source,sh]
+----
+[(F.)]
+Randomized with --seed 306039695
+
+FAIL in exo.add-test/will-fail (add_test.clj:10)
+Expected:
+  1
+Actual:
+  -1 +2
+2 tests, 2 assertions, 1 failures.
+➜ echo $?
+1
+----
+
+=== Build
+
 When building the Docker image we alway run the tests first
 
 [source,sh]
 ----
-docker build --tag clj-example .
-...
-...
-
-Running tests in #{"test"}
-
-Testing exo.add-test
-
-Ran 1 tests containing 1 assertions.
-0 failures, 0 errors.
-
+➜ docker build --tag clj-example .
 ...
 ...
 Successfully built 880afb3fef23
 Successfully tagged clj-example:latest
 ----
 
-We can only run the _test_ step if needed
-
+Then we can execute our program
 [source,sh]
 ----
-docker build --target test .
+➜ docker run clj-example:latest 1 2 3
+6M
 ----

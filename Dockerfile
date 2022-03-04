@@ -21,15 +21,17 @@ COPY src ./src
 COPY test ./test
 COPY deps.edn ./deps.edn
 
-RUN ["clj", "-M:uberdeps"]
-
 ## Test layer
 FROM build AS test
-RUN ["clj", "-M:test"]
+CMD clojure -M:test -m kaocha.runner
+
+## Uberjar layer
+FROM build AS uberjar
+RUN clj -M:uberdeps
 
 ## Deployment layer
 FROM base AS deployment
-COPY --from=build /app/target/app.jar /app.jar
+COPY --from=uberjar /app/target/app.jar /app.jar
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
