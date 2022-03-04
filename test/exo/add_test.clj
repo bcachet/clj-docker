@@ -4,4 +4,5 @@
 
 
 (deftest sum-all-things
-  (is (sum 1 2 3)))
+  (is (= (sum 1 2 3)
+         6)))

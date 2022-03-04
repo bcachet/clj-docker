@@ -3,3 +3,34 @@
 When building Docker image for a Clojure project, we endup testing outside of the final environment.
 
 Here I try to benefit from Docker layers to build/test from the same Java environment that will be used to run the Docker image.
+
+
+== Continous Integration
+
+When building the Docker image we alway run the tests first
+
+[source,sh]
+----
+docker build --tag clj-example .
+...
+...
+
+Running tests in #{"test"}
+
+Testing exo.add-test
+
+Ran 1 tests containing 1 assertions.
+0 failures, 0 errors.
+
+...
+...
+Successfully built 880afb3fef23
+Successfully tagged clj-example:latest
+----
+
+We can only run the _test_ step if needed
+
+[source,sh]
+----
+docker build --target test .
+----
