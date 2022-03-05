@@ -7,3 +7,8 @@
   (is (= (sum 1 2 3)
          6)))
 
+
+(deftest ^:integration sum-all-things-in-integration
+  (is (= (sum 1 1)
+         2)))
+

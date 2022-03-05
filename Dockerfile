@@ -44,14 +44,14 @@ RUN clojure -P -M:test
 #### Now that deps have been cached we COPY src/test folder that
 #### are modified on a more regular basis
 COPY src ./src
-COPY test ./test
 
 ## Test layer
 #### We use CMD => we will have to build image with specific "test" target
 #### and docker run the generated image to run the tests
 #### That allow us to run tests from CI in a dedicated step
 FROM build AS test
-CMD clojure -M:test -m kaocha.runner
+COPY test ./test
+CMD clojure -M:test -m kaocha.runner --skip-meta :integration
 
 ## Uberjar layer
 ### We build the artifacts in the "build" context/layer

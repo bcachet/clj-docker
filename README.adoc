@@ -53,6 +53,19 @@ Actual:
 1
 ----
 
+At any time we can override the CMD to be executed in our _test layer_ to execute different tests
+
+For example:
+
+[source,sh]
+----
+➜ docker run clj-example-tests:latest clojure -M:test -m kaocha.runner --focus-meta :integration
+# ... <SKIPPED>
+[(.)]
+1 tests, 1 assertions, 0 failures.
+----
+
+
 === Build
 
 Artifact is built in a "build" layer and later copied on a "deployment" layer 
