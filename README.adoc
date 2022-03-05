@@ -9,11 +9,19 @@ Here I try to benefit from Docker layers to build/test from the same Java enviro
 
 === Test
 
-We can run the _test_ step if needed
+We can run the _test_ step independently of the build of the complete image
+=> we can run tests in a dedicated step of our CI pipeline
+
+If we configure our test-runner to output results in a file (XUnit format), we can
+retrieve this file leveraging Docker volumes when calling "docker run"
 
 [source,sh]
 ----
-➜ docker build --target test .
+➜ docker build --target test --tag clj-example-tests .
+➜ docker run clj-example-tests:latest
+# ... <SKIPPED>
+[(.)]
+1 tests, 1 assertions, 0 failures.
 ----
 
 Let's introduce a failing test
@@ -25,16 +33,17 @@ Let's introduce a failing test
   (is (= 1 (sum 1 1))))
 EOF
 ➜ docker build --target test --tag clj-example-tests .
-➜ docker run clj-example-tests:latest
 ----
 
 Here is output of the run
 [source,sh]
 ----
+➜ docker run clj-example-tests:latest
+# ... <SKIPPED>
 [(F.)]
-Randomized with --seed 306039695
+Randomized with --seed 875721236
 
-FAIL in exo.add-test/will-fail (add_test.clj:10)
+FAIL in exo.add-test/will-fail (add_test.clj:11)
 Expected:
   1
 Actual:
@@ -46,13 +55,13 @@ Actual:
 
 === Build
 
-When building the Docker image we alway run the tests first
+Artifact is built in a "build" layer and later copied on a "deployment" layer 
+that does not include all the build tools => lightweight docker image
 
 [source,sh]
 ----
 ➜ docker build --tag clj-example .
-...
-...
+# ... <SKIPPED>
 Successfully built 880afb3fef23
 Successfully tagged clj-example:latest
 ----
@@ -61,5 +70,19 @@ Then we can execute our program
 [source,sh]
 ----
 ➜ docker run clj-example:latest 1 2 3
-6M
+Result: 6
 ----
+
+Here are image sizes involved in this pipeline
+
+[source,sh]
+----
+➜ docker image list
+REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
+clj-example   latest    533dd371f7ba   7 seconds ago    342MB
+<none>        <none>    afed52b6047a   8 seconds ago    468MB
+<none>        <none>    ab0222b7d14a   13 seconds ago   463MB
+ubuntu        focal     2b4cba85892a   43 hours ago     72.8MB
+----
+
+=> Our final image is only 5MB on top of openjdk one

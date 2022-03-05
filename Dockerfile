@@ -1,4 +1,14 @@
-FROM openjdk:17-buster AS base
+## Base layer (Ubuntu + Java + ca-certs)
+FROM ubuntu:focal AS base
+
+### Install Java + ca-certs
+ENV JDK_VERSION=17
+RUN set -xe \
+    && apt-get update -q \
+    && apt-get install -y -q ca-certificates openjdk-${JDK_VERSION}-jre-headless \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ## Build layer
 ### Will be composed of build tools + source code
@@ -9,9 +19,9 @@ ENV CLOJURE_VERSION=1.10.3.1087
 ENV CLOJURE_SHA256=fd3d465ac30095157ce754f1551b840008a6e3503ce5023d042d0490f7bafb98
 RUN \
     apt-get update && \
-    apt-get install -y make rlwrap && \
+    apt-get install -y curl make rlwrap && \
     rm -rf /var/lib/apt/lists/* && \
-    wget https://download.clojure.org/install/linux-install-${CLOJURE_VERSION}.sh && \
+    curl https://download.clojure.org/install/linux-install-${CLOJURE_VERSION}.sh --output linux-install-${CLOJURE_VERSION}.sh && \
     sha256sum linux-install-${CLOJURE_VERSION}.sh && \
     echo "${CLOJURE_SHA256} *linux-install-$CLOJURE_VERSION.sh" | sha256sum -c - && \
     chmod +x linux-install-$CLOJURE_VERSION.sh && \
@@ -28,6 +38,7 @@ WORKDIR /app
 #### That will speed up future "clojure" invocation to build/test our code
 COPY deps.edn ./deps.edn
 RUN clojure -P -M:uberdeps
+#### Drawback is that test artifacts will be included into final image
 RUN clojure -P -M:test
 
 ### Source code
