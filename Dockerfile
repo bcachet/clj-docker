@@ -26,7 +26,8 @@ WORKDIR /app
 #### We retrieve deps from a dedicated RUN to cache the result
 #### That will speed up later usage of "clojure" command in later CMD/RUN
 COPY deps.edn ./deps.edn
-RUN clojure -P -M:uberdeps && clojure -P -M:test
+RUN clojure -P -M:uberdeps
+RUN clojure -P -M:test
 
 ### Source code
 #### Now that deps have been cached we COPY src/test folder that
