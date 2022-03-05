@@ -1,6 +1,5 @@
 ## Base layer (Ubuntu + Java + ca-certs)
 FROM ubuntu:focal AS base
-
 ### Install Java + ca-certs
 ENV JDK_VERSION=17
 RUN set -xe \
@@ -11,7 +10,7 @@ RUN set -xe \
     && rm -rf /var/lib/apt/lists/*
 
 ## Build layer
-### Will be composed of build tools + source code
+### Will be composed of build tools (not needed in deployment layer) + source code
 FROM base AS build
 ### Install clojure
 ### Does not change much => we do it a dedicated RUN to cache result
@@ -59,8 +58,9 @@ CMD clojure -M:test -m kaocha.runner
 FROM build AS uberjar
 RUN clojure -M:uberdeps
 
+
 ## Deployment layer
-### We copy the artifacts in a smaller image to lower the size of the final Docker image
+### We copy the artifacts into base layer to lower the size of the final Docker image
 FROM base AS deployment
 COPY --from=uberjar /app/target/app.jar /app.jar
 COPY docker/entrypoint.sh /entrypoint.sh
