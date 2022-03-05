@@ -4,5 +4,5 @@
 
 (defn -main
   [& args]
-  (println (apply sum (map bigdec args)))
+  (println (apply sum (map bigint args)))
   (System/exit 0))

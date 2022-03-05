@@ -17,9 +17,14 @@ RUN \
     clojure -e "(clojure-version)"
 
 WORKDIR /app
+
+## Install deps (changed not so often)
+COPY deps.edn ./deps.edn
+RUN clojure -P -M:uberdeps
+
+## Install sources (changed on regular basis)
 COPY src ./src
 COPY test ./test
-COPY deps.edn ./deps.edn
 
 ## Test layer
 FROM build AS test
