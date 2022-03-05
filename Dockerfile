@@ -23,11 +23,13 @@ COPY deps.edn ./deps.edn
 
 ## Test layer
 FROM build AS test
+VOLUME ["~/.m2"]
 CMD clojure -M:test -m kaocha.runner
 
 ## Uberjar layer
 FROM build AS uberjar
-RUN clj -M:uberdeps
+VOLUME ["~/.m2"]
+RUN clojure -M:uberdeps
 
 ## Deployment layer
 FROM base AS deployment
