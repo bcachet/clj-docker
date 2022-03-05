@@ -1,4 +1,4 @@
-= Rational
+== Rational
 
 When building Docker image for a Clojure project, we endup testing outside of the final environment.
 
