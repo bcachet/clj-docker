@@ -22,9 +22,10 @@ RUN \
 WORKDIR /app
 
 ### Cache Clojure deps
-#### "deps.edn" does not change regularly
-#### We only copy it and retrieve dependencies running "clojure" command in
+#### "deps.edn" does not change regularly and is defining our dependencies
+#### We COPY it and ask "clojure" to retrieve dependencies in
 #### dedicated RUN so that Docker can cache results
+#### That will speed up future "clojure" invocation to build/test our code
 COPY deps.edn ./deps.edn
 RUN clojure -P -M:uberdeps
 RUN clojure -P -M:test
