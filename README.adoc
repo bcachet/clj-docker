@@ -98,9 +98,6 @@ clj-example   latest    533dd371f7ba   7 seconds ago    342MB
 ubuntu        focal     2b4cba85892a   43 hours ago     72.8MB
 ----
 
-=> Our final image is only 5MB on top of openjdk one
-
-
 
 == DevContainer
 
