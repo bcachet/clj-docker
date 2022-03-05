@@ -22,9 +22,9 @@ RUN \
 WORKDIR /app
 
 ### Cache Clojure deps
-#### Retrieving depends only on "deps.edn" file that we do not change so often
-#### We retrieve deps from a dedicated RUN to cache the result
-#### That will speed up later usage of "clojure" command in later CMD/RUN
+#### "deps.edn" does not change regularly
+#### We only copy it and retrieve dependencies running "clojure" command in
+#### dedicated RUN so that Docker can cache results
 COPY deps.edn ./deps.edn
 RUN clojure -P -M:uberdeps
 RUN clojure -P -M:test
