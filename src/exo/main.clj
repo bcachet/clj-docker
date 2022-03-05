@@ -4,5 +4,5 @@
 
 (defn -main
   [& args]
-  (println (apply sum (map bigint args)))
+  (println (format "Result: %d" (apply sum (map #(Integer/parseInt %) args))))
   (System/exit 0))

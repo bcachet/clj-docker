@@ -1,6 +1,7 @@
 FROM openjdk:17-buster AS base
 
 ## Build layer
+### Will be composed of build tools + source code
 FROM base AS build
 ### Install clojure
 ### Does not change much => we do it a dedicated RUN to cache result
