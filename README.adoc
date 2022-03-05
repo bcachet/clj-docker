@@ -99,3 +99,11 @@ ubuntu        focal     2b4cba85892a   43 hours ago     72.8MB
 ----
 
 => Our final image is only 5MB on top of openjdk one
+
+
+
+== DevContainer
+
+[DevContainer](https://code.visualstudio.com/docs/remote/containers) configuration is provided in .devcontainer/devcontainer.json
+
+It is reusing _test_ layer => Clojure and our dependencies are already installed => jack-in is really fast
