@@ -104,6 +104,8 @@ ubuntu        focal     2b4cba85892a   43 hours ago     72.8MB
 
 == DevContainer
 
-[DevContainer](https://code.visualstudio.com/docs/remote/containers) configuration is provided in .devcontainer/devcontainer.json
+link:https://code.visualstudio.com/docs/remote/containers[DevContainer] configuration is provided in link:.devcontainer/devcontainer.json[.devcontainer/devcontainer.json]
 
 It is reusing _test_ layer => Clojure and our dependencies are already installed => jack-in is really fast
+
+That is allowing us to develop in the exact same environment that will be used to validate in the CI or deploy our application
