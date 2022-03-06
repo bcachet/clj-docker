@@ -1,7 +1,7 @@
 ## Base layer (Ubuntu + Java + ca-certs)
 FROM ubuntu:focal AS base
 ### Install Java + ca-certs
-ENV JDK_VERSION=17
+ARG JDK_VERSION=17
 RUN set -xe \
     && apt-get update -q \
     && apt-get install -y -q ca-certificates openjdk-${JDK_VERSION}-jre-headless \
@@ -14,8 +14,8 @@ RUN set -xe \
 FROM base AS build
 ### Install clojure
 ### Does not change much => we do it a dedicated RUN to cache result
-ENV CLOJURE_VERSION=1.10.3.1087
-ENV CLOJURE_SHA256=fd3d465ac30095157ce754f1551b840008a6e3503ce5023d042d0490f7bafb98
+ARG CLOJURE_VERSION=1.10.3.1087
+ARG CLOJURE_SHA256=fd3d465ac30095157ce754f1551b840008a6e3503ce5023d042d0490f7bafb98
 RUN \
     apt-get update && \
     apt-get install -y curl make rlwrap && \
